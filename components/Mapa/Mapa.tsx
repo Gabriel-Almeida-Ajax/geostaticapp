@@ -99,7 +99,7 @@ const Mapa = (props: any) => {
             <Polyline
                 pathOptions={pathOptions}
                 positions={positions}>
-                <Popup onOpen={getInfo} >{feature.properties.codarea}</Popup>
+                <Popup onOpen={getInfo} >{color * 100}%</Popup>
             </Polyline>
         </>)
 
@@ -113,7 +113,7 @@ const Mapa = (props: any) => {
 
     return (
         <Container>
-            <h1>Vaga Junior</h1>
+            <h1>Vaga Junior - Cobertura da Vacinação BCG (2010/2019)</h1>
             <Pesquisa>
                 <select defaultValue={form.estado} id="estado" onChange={changeSelect}>
                     {estados.map(({ id, nome, sigla }: any) => <option key={id} {...{ id, value: id }}>{nome}</option>)}
@@ -129,11 +129,6 @@ const Mapa = (props: any) => {
                 {
                     state.size && features.map(Poly)
                 }
-                <Marker position={[51.505, -0.09]}>
-                    <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
-                </Marker>
             </MapContainer>
         </Container>
     )
