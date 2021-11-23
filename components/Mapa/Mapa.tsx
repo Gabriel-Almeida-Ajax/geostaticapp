@@ -2,7 +2,8 @@ import { MapContainer, Marker, Popup, TileLayer, Polyline } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import styled from 'styled-components'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Container = styled.div`
     width: 100vw;
@@ -21,23 +22,51 @@ const Pesquisa = styled.div`
     align-items: center;
 `
 
-const Map = (props: any) => {
+type TUf = {
+    id_minic: number,
+    id_estad: number,
+    ano: number,
+    cob_vac_bcg: number,
+
+}
+
+const Mapa = (props: any) => {
     const { anos, estados, regioes } = props.data;
     const [features, setFeatures] = useState(regioes.data.features);
+    const [state, setState] = useState(regioes.data.features);
 
-    function Poly (feature: any) {
+    useEffect(() => {
+        async function getDados(uf: number) {
+            const states = new Map();
+
+            const res = await axios.get(`/api/dados?file=${uf}`)
+                console.log(res)
+            res.data.dados.forEach((uf: TUf) => {
+                states.set(uf.id_minic, uf)
+            })
+
+            setState(states)
+
+            console.log(states)
+        }
+
+        getDados(35)
+
+    }, [features])
+
+    function Poly(feature: any) {
         const pathOptions = { fill: true, color: '#ffA800', fillColor: '#ffA800', fillOpacity: .2 };
         const positions = [feature.geometry.coordinates[0].map((arr: any) => ([arr[1], arr[0]]))]
 
-        return(<>
-        <Polyline 
-            pathOptions={pathOptions} 
-            positions={positions}>
+        return (<>
+            <Polyline
+                pathOptions={pathOptions}
+                positions={positions}>
                 <Popup>{feature.properties.codarea}</Popup>
-        </Polyline>
+            </Polyline>
         </>)
     }
-    
+
 
     return (
         <Container>
@@ -67,4 +96,4 @@ const Map = (props: any) => {
     )
 }
 
-export default Map
+export default Mapa;

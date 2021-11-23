@@ -1,0 +1,47 @@
+-------------------- Auto-Git Log --------------------
+		Tue Nov 23 2021 16:18:35 GMT-0300 (Horário Padrão de Brasília)
+------------------------------------------------------
+
+Modified files:
+* pages/api/regions.ts
+* pages/index.tsx
+
+
+Created files:
+* .autogit/logs/log-23-10-2021-14-57-51.txt
+* assets/11.json
+* assets/12.json
+* assets/13.json
+* assets/14.json
+* assets/15.json
+* assets/16.json
+* assets/17.json
+* assets/21.json
+* assets/22.json
+* assets/23.json
+* assets/24.json
+* assets/25.json
+* assets/26.json
+* assets/27.json
+* assets/28.json
+* assets/29.json
+* assets/31.json
+* assets/32.json
+* assets/33.json
+* assets/35.json
+* assets/41.json
+* assets/42.json
+* assets/43.json
+* assets/50.json
+* assets/51.json
+* assets/52.json
+* assets/53.json
+* pages/api/separador.ts
+
+
+Deleted files:
+
+
+Renamed files:
+* [object Object]
+* [object Object]
