@@ -34,7 +34,7 @@ const Home: NextPage = (props) => {
 export const getStaticProps: GetStaticProps = async () => {
   const res = await axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados`);
 
-  const local = await axios.get(`http://localhost:3000/api/regions`);
+  const local = await axios.get(`http://localhost:3000/api/regions?id=35`);
 
   const anos = Array.from({length: 10}).map((_, i) => i + 2010)
 

@@ -39,25 +39,35 @@ const Mapa = (props: any) => {
         estado: 35,
         ano: 2019,
     })
+    const [lastState, setLastState] = useState(NaN);
+    console.count('didmount')
 
     useEffect(() => {
         async function getDados(uf: number) {
             const states = new Map();
-            console.log(form)
 
-            const res = await axios.get(`/api/dados?file=${uf}`)
-            console.log(res)
+            const res = await axios.get(`/api/dados?file=${uf}`);
+
             res.data.dados.forEach((uf: TUf) => {
                 states.set(`${uf.id_minic} - ${uf.ano}`, uf)
-            })
+            });
 
-            setState(states)
+            setState(states);
+            setLastState(form.estado)
 
         }
 
-        getDados(form.estado)
+        async function getGeoJson(uf: number) {
+            const res = await axios.get(`https://servicodados.ibge.gov.br/api/v3/malhas/estados/${uf}?formato=application/vnd.geo+json&qualidade=intermediaria&intrarregiao=municipio`);
 
-    }, [features, form.estado])
+            setFeatures(res.data.features);
+            getDados(uf)
+        }
+        if(form.estado !== lastState){
+            getGeoJson(form.estado)
+        }
+
+    }, [features, form.estado, lastState])
 
     const Poly = useCallback((feature: any) => {
         const colors = [
