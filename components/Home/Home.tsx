@@ -1,8 +1,8 @@
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer, Polyline } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import styled from 'styled-components'
 
-
+import { useState } from 'react'
 
 const Container = styled.div`
     width: 100vw;
@@ -22,7 +22,12 @@ const Pesquisa = styled.div`
 `
 
 const Map = (props: any) => {
-    console.log(props)
+    const [features, setFeatures] = useState(props.data.regioes.data.features)
+
+    function Poly (feature: any) {
+        return <Polyline pathOptions={{ color: 'lime' }} positions={[feature.geometry.coordinates[0].map((arr: any) => ([arr[1], arr[0]]))]} />
+    }
+    
 
     return (
         <Container>
@@ -39,11 +44,14 @@ const Map = (props: any) => {
                     <option value=""></option>
                 </select>
             </Pesquisa>
-            <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false} style={{ height: 400, width: "100%" }}>
+            <MapContainer center={[-23.60088996183807, -46.75979752536637]} zoom={13} scrollWheelZoom={false} style={{ height: 400, width: "100%" }}>
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
+                {
+                    features.map(Poly)
+                }
                 <Marker position={[51.505, -0.09]}>
                     <Popup>
                         A pretty CSS3 popup. <br /> Easily customizable.

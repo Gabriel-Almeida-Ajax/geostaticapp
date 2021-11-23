@@ -12,10 +12,10 @@ const Home: NextPage = (props) => {
   const Map = useMemo(() => dynamic(
     () => import('../components/Home/Home'), // replace '@components/map' with your component's location
     { ssr: false } // This line is important. It's what prevents server-side render
-  ),[])
+  ), [])
 
-    console.log(props)
-    
+  console.log(props)
+
   return (<>
     <Head>
       <title>Geo Static App</title>
@@ -29,22 +29,28 @@ const Home: NextPage = (props) => {
     <Script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
       integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     />
-    <Map />
+    <Map {...props}/>
   </>)
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   const res = await axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados`);
-  const data = await res.data;
 
-  if (!data) {
-      return {
-          notFound: true,
-      }
+  const local = await axios.get(`http://localhost:3000/api/regions`);
+
+  const data = {
+    estados: await res.data,
+    regioes: await local.data
+  };
+
+  if (!data.estados && !data.regioes) {
+    return {
+      notFound: true,
+    }
   }
 
   return {
-      props: { data }, // will be passed to the page component as props
+    props: { data }, // will be passed to the page component as props
   }
 }
 
