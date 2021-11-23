@@ -10,7 +10,7 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    axios.get(`https://servicodados.ibge.gov.br/api/v3/malhas/estados/${35}?formato=application/vnd.geo+json&qualidade=intermediaria&intrarregiao=municipio`)
+    axios.get(`https://servicodados.ibge.gov.br/api/v3/malhas/estados/${req.query.id}?formato=application/vnd.geo+json&qualidade=intermediaria&intrarregiao=municipio`)
         .then(resp => {
             res.status(200).json({ data: resp.data })
         })
