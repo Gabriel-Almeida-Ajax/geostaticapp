@@ -22,10 +22,20 @@ const Pesquisa = styled.div`
 `
 
 const Map = (props: any) => {
-    const [features, setFeatures] = useState(props.data.regioes.data.features)
+    const { anos, estados, regioes } = props.data;
+    const [features, setFeatures] = useState(regioes.data.features);
 
     function Poly (feature: any) {
-        return <Polyline pathOptions={{ color: 'lime' }} positions={[feature.geometry.coordinates[0].map((arr: any) => ([arr[1], arr[0]]))]} />
+        const pathOptions = { fill: true, color: '#ffA800', fillColor: '#ffA800', fillOpacity: .2 };
+        const positions = [feature.geometry.coordinates[0].map((arr: any) => ([arr[1], arr[0]]))]
+
+        return(<>
+        <Polyline 
+            pathOptions={pathOptions} 
+            positions={positions}>
+                <Popup>{feature.properties.codarea}</Popup>
+        </Polyline>
+        </>)
     }
     
 
@@ -34,19 +44,14 @@ const Map = (props: any) => {
             <h1>Vaga Junior</h1>
             <Pesquisa>
                 <select>
-                    <option value=""></option>
-                    <option value=""></option>
-                    <option value=""></option>
+                    {estados.map(({ id, nome, sigla }: any) => <option key={id} {...{ id, value: id }}>{nome}</option>)}
                 </select>
                 <select>
-                    <option value=""></option>
-                    <option value=""></option>
-                    <option value=""></option>
+                    {anos.map((ano: any) => <option key={ano} {...{ id: ano, value: ano }}>{ano}</option>)}
                 </select>
             </Pesquisa>
-            <MapContainer center={[-23.60088996183807, -46.75979752536637]} zoom={13} scrollWheelZoom={false} style={{ height: 400, width: "100%" }}>
+            <MapContainer center={[-23.60088996183807, -46.75979752536637]} zoom={5} scrollWheelZoom={false} style={{ height: 400, width: "100%" }}>
                 <TileLayer
-                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 {

@@ -2,12 +2,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
-  name: string
+  dados: any
 }
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ name: 'John Doe' })
+  const fileName = `${req.query.file}.json`;
+  const dados = JSON.stringify(require(fileName));
+
+  res.status(200).json({ dados });
 }

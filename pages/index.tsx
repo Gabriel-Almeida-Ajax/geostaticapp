@@ -10,11 +10,9 @@ import axios from 'axios'
 
 const Home: NextPage = (props) => {
   const Map = useMemo(() => dynamic(
-    () => import('../components/Home/Home'), // replace '@components/map' with your component's location
-    { ssr: false } // This line is important. It's what prevents server-side render
+    () => import('../components/Mapa/Mapa'),
+    { ssr: false } // impede a renderização do mapa no lado do servidor
   ), [])
-
-  console.log(props)
 
   return (<>
     <Head>
@@ -38,9 +36,12 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const local = await axios.get(`http://localhost:3000/api/regions`);
 
+  const anos = Array.from({length: 10}).map((_, i) => i + 2010)
+
   const data = {
     estados: await res.data,
-    regioes: await local.data
+    regioes: await local.data,
+    anos
   };
 
   if (!data.estados && !data.regioes) {

@@ -1,0 +1,17 @@
+-------------------- Auto-Git Log --------------------
+		Tue Nov 23 2021 14:57:51 GMT-0300 (Horário Padrão de Brasília)
+------------------------------------------------------
+
+Modified files:
+* components/Home/Home.tsx
+* pages/api/regions.ts
+* pages/index.tsx
+
+
+Created files:
+
+
+Deleted files:
+
+
+Renamed files:
