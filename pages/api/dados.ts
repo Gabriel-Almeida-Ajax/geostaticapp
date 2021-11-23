@@ -5,17 +5,12 @@ type Data = {
   dados: any
 }
 
-import * as data from '../../assets/11.json'
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const fileName = `../../assets/${req.query.file}.json`;
-  // const dados = JSON.stringify(await import(fileName));
 
+  const file = (require('../../assets/' + req.query.file + '.json'));
 
-  console.log(await import(fileName))
-
-  res.status(200).json({ dados: [] });
+  res.status(200).json({ dados: file });
 }

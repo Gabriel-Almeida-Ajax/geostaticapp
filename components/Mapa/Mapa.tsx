@@ -2,7 +2,7 @@ import { MapContainer, Marker, Popup, TileLayer, Polyline } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import styled from 'styled-components'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 
 const Container = styled.div`
@@ -40,7 +40,7 @@ const Mapa = (props: any) => {
             const states = new Map();
 
             const res = await axios.get(`/api/dados?file=${uf}`)
-                console.log(res)
+            console.log(res)
             res.data.dados.forEach((uf: TUf) => {
                 states.set(uf.id_minic, uf)
             })
@@ -54,15 +54,27 @@ const Mapa = (props: any) => {
 
     }, [features])
 
+    
+
     function Poly(feature: any) {
-        const pathOptions = { fill: true, color: '#ffA800', fillColor: '#ffA800', fillOpacity: .2 };
+        const colors = ['#FF7B00', '#FF8800', '#FF9500', '#FFA200', '#FFAA00', '#FFB700', '#FFC300', '#FFD000','#FFDD00', '#FFEA00']
+
+
+
+        const pathOptions = { fill: true, color: '#ffA800', fillOpacity: .2 };
         const positions = [feature.geometry.coordinates[0].map((arr: any) => ([arr[1], arr[0]]))]
+
+        const getInfo = useCallback(() => {
+
+            console.log('Open: ', state.get(+feature.properties.codarea))
+        
+        },[feature.properties.codarea, state])
 
         return (<>
             <Polyline
                 pathOptions={pathOptions}
                 positions={positions}>
-                <Popup>{feature.properties.codarea}</Popup>
+                <Popup onOpen={getInfo} >{feature.properties.codarea}</Popup>
             </Polyline>
         </>)
     }
