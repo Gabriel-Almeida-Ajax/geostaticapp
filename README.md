@@ -11,5 +11,3 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-![image](https://user-images.githubusercontent.com/58678638/143130391-d3ceeac5-78c1-4987-a489-fc15db07c0f5.png)
