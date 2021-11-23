@@ -33,42 +33,57 @@ type TUf = {
 const Mapa = (props: any) => {
     const { anos, estados, regioes } = props.data;
     const [features, setFeatures] = useState(regioes.data.features);
-    const [state, setState] = useState(regioes.data.features);
+    const [state, setState] = useState(new Map());
+
+    const [form, setForm] = useState({
+        estado: 35,
+        ano: 2019,
+    })
 
     useEffect(() => {
         async function getDados(uf: number) {
             const states = new Map();
+            console.log(form)
 
             const res = await axios.get(`/api/dados?file=${uf}`)
             console.log(res)
             res.data.dados.forEach((uf: TUf) => {
-                states.set(uf.id_minic, uf)
+                states.set(`${uf.id_minic} - ${uf.ano}`, uf)
             })
 
             setState(states)
 
-            console.log(states)
         }
 
-        getDados(35)
+        getDados(form.estado)
 
-    }, [features])
+    }, [features, form.estado])
 
-    
+    const Poly = useCallback((feature: any) => {
+        const colors = [
+            '#fffbca',
+            '#ffef88',
+            '#ffe988',
+            '#ffd752',
+            '#ffce52',
+            '#ffc041',
+            '#fcb12f',
+            '#ffa425',
+            '#ff9925',
+            '#FF7B00',
+        ]
 
-    function Poly(feature: any) {
-        const colors = ['#FF7B00', '#FF8800', '#FF9500', '#FFA200', '#FFAA00', '#FFB700', '#FFC300', '#FFD000','#FFDD00', '#FFEA00']
+        const nivel = +state.get(`${feature.properties.codarea} - ${form.ano}`)?.cob_vac_bcg / 100;
+        const color = parseInt(`${nivel}`)
 
-
-
-        const pathOptions = { fill: true, color: '#ffA800', fillOpacity: .2 };
+        const pathOptions = { fill: true, color: colors[color], fillOpacity: .8, fillColor: colors[color] };
         const positions = [feature.geometry.coordinates[0].map((arr: any) => ([arr[1], arr[0]]))]
 
-        const getInfo = useCallback(() => {
+        const getInfo = () => {
 
-            console.log('Open: ', state.get(+feature.properties.codarea))
-        
-        },[feature.properties.codarea, state])
+            console.log('Open: ', state.get(`${feature.properties.codarea} - ${form.ano}`))
+
+        }
 
         return (<>
             <Polyline
@@ -77,17 +92,23 @@ const Mapa = (props: any) => {
                 <Popup onOpen={getInfo} >{feature.properties.codarea}</Popup>
             </Polyline>
         </>)
-    }
 
+    }, [form.ano, state])
+
+    
+
+    const changeSelect = ({ target }: any) => {
+        setForm(old => ({ ...old, [target.id]: +target.value})) 
+    }
 
     return (
         <Container>
             <h1>Vaga Junior</h1>
             <Pesquisa>
-                <select>
+                <select defaultValue={form.estado} id="estado" onChange={changeSelect}>
                     {estados.map(({ id, nome, sigla }: any) => <option key={id} {...{ id, value: id }}>{nome}</option>)}
                 </select>
-                <select>
+                <select defaultValue={form.ano} id="ano" onChange={changeSelect}>
                     {anos.map((ano: any) => <option key={ano} {...{ id: ano, value: ano }}>{ano}</option>)}
                 </select>
             </Pesquisa>
@@ -96,7 +117,7 @@ const Mapa = (props: any) => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 {
-                    features.map(Poly)
+                    state.size && features.map(Poly)
                 }
                 <Marker position={[51.505, -0.09]}>
                     <Popup>
