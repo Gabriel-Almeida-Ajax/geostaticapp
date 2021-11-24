@@ -83,7 +83,7 @@ const Mapa = (props: any) => {
             '#FF7B00',
         ]
 
-        const nivel = +state.get(`${feature.properties.codarea} - ${form.ano}`)?.cob_vac_bcg / 100;
+        const nivel = (+state.get(`${feature.properties.codarea} - ${form.ano}`)?.cob_vac_bcg / 10) - 0.0001;
         const color = parseInt(`${nivel}`)
 
         const pathOptions = { fill: true, color: colors[color], fillOpacity: .8, fillColor: colors[color] };
@@ -99,7 +99,7 @@ const Mapa = (props: any) => {
             <Polyline
                 pathOptions={pathOptions}
                 positions={positions}>
-                <Popup onOpen={getInfo} >{color * 100}%</Popup>
+                <Popup onOpen={getInfo} >{color * 10}%</Popup>
             </Polyline>
         </>)
 
